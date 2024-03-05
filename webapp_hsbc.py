@@ -16,6 +16,7 @@ app.config['SECRET_KEY'] = 'this_is_bad_secret_key'
 # get your openai api key at https://platform.openai.com/
 OPENAI_API_KEY = 'your_openai_api_key'
 os.environ["OPENAI_API_KEY"] = OPENAI_API_KEY
+
 # get your cohere api key at https://cohere.com/
 COHERE_KEY = 'your_cohere_api_key'
 co = cohere.Client(COHERE_KEY)
@@ -50,12 +51,13 @@ def get_context_embeddings_co():
 	context_emb = np.asarray(context_emb)
 	return context_emb
 
+context_emb = get_context_embeddings_co()
+
 def generate_full_llm_query(query, document_chunks, prompt_template, limit_input_tokens=4096):
 
 	# cohere embeddings
 	query_emb = co.embed([query], input_type="search_query", model="embed-multilingual-v3.0").embeddings
 	query_emb = np.asarray(query_emb)
-	context_emb = get_context_embeddings_co()
 
 	#Compute the dot product between query embedding and document embedding
 	scores = np.dot(query_emb, context_emb.T).squeeze()
@@ -120,7 +122,7 @@ def send_message():
 	# Process user message here if needed
 	now = datetime.datetime.now()
 	llm_full_query, context_chunks = generate_full_llm_query(query, document_chunks, prompt_template, limit_input_tokens=limit_input_tokens)
-	print('current full query:', llm_full_query)
+	# print('current full query:', llm_full_query)
 	llm_answer = llm.invoke(llm_full_query)
 	#llm_answer = llm_full_query  # this is a stub if llm initialization disabled
 	llm_answer = llm_answer.content.strip()
