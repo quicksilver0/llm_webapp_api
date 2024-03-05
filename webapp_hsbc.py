@@ -8,7 +8,7 @@ import cohere
 import pickle
 import numpy as np
 import time
-from langchain_community.chat_models import ChatOpenAI
+from langchain_openai import ChatOpenAI
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'this_is_bad_secret_key'
@@ -16,7 +16,6 @@ app.config['SECRET_KEY'] = 'this_is_bad_secret_key'
 # get your openai api key at https://platform.openai.com/
 OPENAI_API_KEY = 'your_openai_api_key'
 os.environ["OPENAI_API_KEY"] = OPENAI_API_KEY
-
 # get your cohere api key at https://cohere.com/
 COHERE_KEY = 'your_cohere_api_key'
 co = cohere.Client(COHERE_KEY)
@@ -31,7 +30,7 @@ def read_dataset():
 	# read file
 	with open(file_path, 'r', encoding="utf-8") as f:
 		document = f.read()
-	document_chunks = document.split('\n\n\n')
+	document_chunks = document.split('########')
 	return document_chunks
 
 document_chunks = read_dataset()
