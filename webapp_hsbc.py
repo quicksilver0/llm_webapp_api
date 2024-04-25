@@ -46,7 +46,7 @@ prompt_template = read_template()
 
 
 def get_context_embeddings_co():
-	context_emb = co.embed(document_chunks, input_type="search_document", model="embed-multilingual-v3.0").embeddings
+	context_emb = co.embed(texts=document_chunks, input_type="search_document", model="embed-multilingual-v3.0").embeddings
 	context_emb = np.asarray(context_emb)
 	return context_emb
 
@@ -55,7 +55,7 @@ context_emb = get_context_embeddings_co()
 def generate_full_llm_query(query, document_chunks, prompt_template, limit_input_tokens=4096):
 
 	# cohere embeddings
-	query_emb = co.embed([query], input_type="search_query", model="embed-multilingual-v3.0").embeddings
+	query_emb = co.embed(texts=[query], input_type="search_query", model="embed-multilingual-v3.0").embeddings
 	query_emb = np.asarray(query_emb)
 
 	#Compute the dot product between query embedding and document embedding
